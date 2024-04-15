@@ -17,6 +17,10 @@ jobs:
         run: volta list
       - name: Install node via Volta # just for debugging
         run: volta install node
+      - name: volta list 2
+        run: volta list
+      - name: debugging 2
+        run: which node
       - name: Install pnpm via Volta
         run: volta install pnpm
         # Set up environment for caching
