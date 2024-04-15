@@ -10,9 +10,13 @@ jobs:
       - name: Install Volta
         uses: volta-cli/action@v4
       - name: debugging
-        run: which node; which volta
+        run: volta list
       - name: Configure volta
         run: volta setup
+      - name: volta list 2
+        run: volta list
+      - name: Install node via Volta # just for debugging
+        run: volta install node
       - name: Install pnpm via Volta
         run: volta install pnpm
         # Set up environment for caching
