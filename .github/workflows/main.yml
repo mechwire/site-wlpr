@@ -9,18 +9,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Volta
         uses: volta-cli/action@v4
-      - name: debugging
-        run: volta list
-      - name: Configure volta
-        run: volta setup
-      - name: volta list 2
-        run: volta list
-      - name: Install node via Volta # just for debugging
+      - name: Install node via Volta # pnpm install doesn't seem to work otherwise, but it also doesn't seem to actuall "install" node; it seems to use the same Node
         run: volta install node
-      - name: volta list 2
-        run: volta list
-      - name: debugging 2
-        run: which node
       - name: Install pnpm via Volta
         run: volta install pnpm
         # Set up environment for caching
