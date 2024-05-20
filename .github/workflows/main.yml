@@ -13,7 +13,6 @@ jobs:
     uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@make-workflow-reusable
     secrets: inherit
     with:
-      tf-folder-path: $GITHUB_WORKSPACE/infra
       ref: make-workflow-reusable
   deploy:
     needs:
