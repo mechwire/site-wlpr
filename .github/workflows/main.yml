@@ -13,28 +13,29 @@ jobs:
     uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@make-workflow-reusable
     secrets: inherit
   deploy:
+    needs: ["infra"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install Volta
         uses: volta-cli/action@v4
-      #- name: Install node via Volta # pnpm install doesn't seem to work otherwise, but it also doesn't seem to actuall "install" node; it seems to use the same Node
-      #  run: volta install node
-      #- name: Install pnpm via Volta
-      #  run: volta install pnpm
-      #  # Set up environment for caching
-      #- name: Get pnpm store directory
-      #   shell: bash
-      #   run: |
-      #     echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      # - uses: actions/cache@v4
-      #   name: Setup pnpm cache
-      #   with:
-      #     path: ${{ env.STORE_PATH }}
-      #     key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-pnpm-store-
+      - name: Install node via Volta # pnpm install doesn't seem to work otherwise, but it also doesn't seem to actuall "install" node; it seems to use the same Node
+        run: volta install node
+      - name: Install pnpm via Volta
+        run: volta install pnpm
+        # Set up environment for caching
+      - name: Get pnpm store directory
+         shell: bash
+         run: |
+           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+       - uses: actions/cache@v4
+         name: Setup pnpm cache
+         with:
+           path: ${{ env.STORE_PATH }}
+           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+           restore-keys: |
+             ${{ runner.os }}-pnpm-store-
       - run: volta run pnpm install
       # Run tests
       - run: volta run pnpm test
