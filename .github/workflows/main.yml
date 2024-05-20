@@ -1,6 +1,13 @@
 name: Javascript CI (Volta + pnpm via volta)
 on:
   - push
+permissions:
+  actions: write
+  checks: write
+  contents: read
+  issues: write
+  pull-requests: write
+  id-token: write # All needed for the infra job
 jobs:
   infra:
     uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@make-workflow-reusable
