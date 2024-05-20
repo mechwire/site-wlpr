@@ -21,6 +21,7 @@ jobs:
       - name: Install Volta
         uses: volta-cli/action@v4
       - name: Install node via Volta # pnpm install doesn't seem to work otherwise, but it also doesn't seem to actuall "install" node; it seems to use the same Node
+        shell: bash
         run: volta install node
       - name: Install pnpm via Volta
         run: volta install pnpm
