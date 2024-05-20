@@ -10,8 +10,11 @@ permissions:
   id-token: write
 jobs:
   infra:
-    uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@make-workflow-reusable
+    uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml
     secrets: inherit
+    with:
+      tf-folder-path: ${{ github.workspace }}/infra
+      ref: make-workflow-reusable
   deploy:
     needs:
       - infra
