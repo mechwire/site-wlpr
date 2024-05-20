@@ -1,23 +1,36 @@
 name: Javascript CI (Volta + pnpm via volta)
 on:
   - push
+permissions:
+  actions: write
+  checks: write
+  contents: read
+  issues: write
+  pull-requests: write
+  id-token: write
 jobs:
-  Javascript-CI:
+  infra:
+    uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@make-workflow-reusable
+    secrets: inherit
+    with:
+      ref: make-workflow-reusable
+  deploy:
+    needs:
+      - infra
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install Volta
         uses: volta-cli/action@v4
-      - name: Install node via Volta # pnpm install doesn't seem to work otherwise, but it also doesn't seem to actuall "install" node; it seems to use the same Node
+      - name: Install node via Volta
+        shell: bash
         run: volta install node
       - name: Install pnpm via Volta
         run: volta install pnpm
-        # Set up environment for caching
       - name: Get pnpm store directory
         shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
@@ -25,6 +38,28 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      - run: pnpm install
-        # Run tests
-      - run: pnpm test
+      - run: volta run pnpm install
+      - run: volta run pnpm test
+      - run: volta run pnpm build
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/${{
+            inputs.aws-role-to-assume }}
+          role-skip-session-tagging: true
+          mask-aws-account-id: true
+      - name: Read TF Output
+        uses: actions/github-script@v7
+        with:
+          script: |
+            output = JSON.parse(${{ steps.infra.outputs.tf-output-general}})
+
+            for (const [key, value] of Object.entries(output)) {
+                core.exportVariable(key, value)
+            }
+      - name: Deploy to S3
+        run: aws s3 sync --delete ./dist/ $website_s3_bucket_arn
+      - name: Create CloudFront invalidation
+        run: aws cloudfront create-invalidation --distribution-id
+          $cloudfront_distribution_id --paths "/*"

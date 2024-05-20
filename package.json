@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/mechwire/wlpr.tech#readme",
   "volta": {
-    "node": "20.12.2"
+    "node": "20.12.2",
+    "pnpm": "9.1.1"
   },
   "dependencies": {
     "astro": "^4.6.1",
