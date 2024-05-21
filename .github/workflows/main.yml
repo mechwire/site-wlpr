@@ -10,10 +10,8 @@ permissions:
   id-token: write
 jobs:
   infra:
-    uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@make-workflow-reusable
+    uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@main
     secrets: inherit
-    with:
-      ref: make-workflow-reusable
   deploy:
     needs:
       - infra
@@ -23,11 +21,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Volta
         uses: volta-cli/action@v4
-      - name: Install node via Volta
+      - name: Install node via Volta # pnpm install doesn't seem to work otherwise, but it also doesn't seem to actuall "install" node; it seems to use the same Node
         shell: bash
         run: volta install node
       - name: Install pnpm via Volta
         run: volta install pnpm
+        # Set up environment for caching
       - name: Get pnpm store directory
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV

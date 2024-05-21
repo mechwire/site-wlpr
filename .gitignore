@@ -106,5 +106,3 @@ terraform.rc
 
 # Hide backend
 **.tfbackend
-
-
