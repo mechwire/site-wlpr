@@ -79,6 +79,13 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
   }
 }
 
+resource "aws_cloudfront_origin_access_control" "cdn_static_site" {
+  name                              = var.bucket_name
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
 
 # Connect s3 to Cloudfront
 
