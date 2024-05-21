@@ -25,8 +25,6 @@ jobs:
       - test
     uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@main
     secrets: inherit
-    with:
-      force-deploy: true
   deploy:
     if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     needs:
