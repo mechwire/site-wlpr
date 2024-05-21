@@ -42,8 +42,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ secrets.AWS_REGION }}
-          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/${{
-            inputs.aws-role-to-assume }}
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/${{ github.event.repository.name }}
           role-skip-session-tagging: true
           mask-aws-account-id: true
       - name: Read TF Output
