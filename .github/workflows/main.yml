@@ -26,6 +26,7 @@ jobs:
     uses: mechwire/tf-state-remote-backend/.github/workflows/tf.yml@main
     secrets: inherit
   deploy:
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     needs:
       - infra
     runs-on: ubuntu-latest
