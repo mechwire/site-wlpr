@@ -11,7 +11,7 @@ terraform {
 provider "aws" {}
 
 module "basic_repo_role" {
-  source          = "../repo_role"
+  source          = "git::https://github.com/mechwire/tf-state-remote-backend//infra/repo_role"
   aws_account_id  = var.aws_account_id
   organization    = var.organization
   repository_name = var.repository_name
