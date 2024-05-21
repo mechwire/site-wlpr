@@ -39,6 +39,17 @@ resource "aws_s3_bucket_policy" "website_bucket_objects" {
   policy = data.aws_iam_policy_document.website_bucket_objects.json
 }
 
+
+# Cloudfront
+
+resource "aws_cloudfront_origin_access_control" "cdn_static_site" {
+  name                              = var.bucket_name
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+
 resource "aws_cloudfront_distribution" "cdn_static_site" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
@@ -55,11 +66,14 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
     }
   }
 
-  enabled = false
+  enabled = true
 
   origin {
     domain_name = aws_s3_bucket.website_bucket.bucket_regional_domain_name
     origin_id   = var.s3_origin_id
+
+    # Optional
+    origin_access_control_id = aws_cloudfront_origin_access_control.cdn_static_site.id
   }
 
   restrictions {
@@ -73,15 +87,19 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
   }
 
   # Optional
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
+
   tags = {
     github     = true,
     repository = var.repository_name
   }
+
 }
 
 
-# Connect s3 to Cloudfront
 
+# Connect s3 to Cloudfront
 data "aws_iam_policy_document" "website" {
   statement {
     sid       = "CloudfrontToS3"

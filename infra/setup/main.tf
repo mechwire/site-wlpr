@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "repo_role" {
   statement {
     sid       = "ManageCloudfront"
     effect    = "Allow"
-    actions   = ["cloudfront:CreateDistribution", "cloudfront:TagResource", "cloudfront:GetDistribution", "cloudfront:ListTagsForResource", "cloudfront:DeleteDistribution"]
+    actions   = ["cloudfront:CreateDistribution", "cloudfront:TagResource", "cloudfront:GetDistribution", "cloudfront:ListTagsForResource", "cloudfront:DeleteDistribution", "cloudfront:UpdateDistribution", "cloudfront:CreateOriginAccessControl", "cloudfront:GetOriginAccessControl", "cloudfront:DeleteOriginAccessControl"]
     resources = ["*"] // We'll tighten this up later
   }
 
