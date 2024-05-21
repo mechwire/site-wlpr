@@ -18,27 +18,27 @@ module "basic_repo_role" {
 }
 
 data "aws_iam_policy_document" "repo_role" {
-  # The roles assigned should allow it to create the necessary infrastructure
+  # The roles assigned should allow it to manage the necessary infrastructure
   statement {
-    sid       = "S3CreateBucket"
+    sid       = "ManageS3"
     effect    = "Allow"
     actions   = ["s3:CreateBucket", "s3:PutBucketTagging", "s3:ListBucket", "s3:GetBucketTagging", "s3:GetBucketPolicy", "s3:GetBucketLogging", "s3:GetBucketAcl", "s3:GetBucketCors", "s3:GetBucketVersioning", "s3:GetBucketWebsite", "s3:GetAccelerateConfiguration", "s3:GetBucketRequestPayment", "s3:GetLifecycleConfiguration", "s3:GetReplicationConfiguration", "s3:GetEncryptionConfiguration", "s3:GetBucketObjectLockConfiguration", "s3:PutBucketOwnershipControls", "s3:PutBucketVersioning", "s3:GetBucketOwnershipControls", "s3:PutObjectAcl", "s3:DeleteBucket", "s3:PutBucketAcl", "s3:PutBucketPolicy"]
     resources = ["arn:aws:s3:::${var.bucket_name}"]
   }
 
-  # The roles assigned should allow it to modify the necessary infrastructure
-  statement {
-    sid       = "S3UploadBuild"
-    effect    = "Allow"
-    actions   = ["s3:ListBucket"]
-    resources = ["arn:aws:s3:::${var.bucket_name}"]
-  }
-
+  # The roles assigned should allow it to use the necessary infrastructure
   statement {
     sid       = "S3UploadBuildObjects"
     effect    = "Allow"
     actions   = ["s3:PutObject", "s3:DeleteObject"]
     resources = ["arn:aws:s3:::${var.bucket_name}/*"]
+  }
+
+  statement {
+    sid       = "ManageCloudfront"
+    effect    = "Allow"
+    actions   = ["cloudfront:CreateDistribution", "cloudfront:TagResource", "cloudfront:GetDistribution", "cloudfront:ListTagsForResource", "cloudfront:DeleteDistribution"]
+    resources = ["*"] // We'll tighten this up later
   }
 
   statement {
