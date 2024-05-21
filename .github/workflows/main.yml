@@ -23,6 +23,7 @@ jobs:
         uses: ./.github/actions/volta-setup
       - run: volta run pnpm test
   deploy:
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install Volta
