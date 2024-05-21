@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "website_bucket_objects" {
     }
 
     actions   = ["s3:GetObject", "s3:PutObject"]
-    resources = [aws_s3_bucket.website_bucket.arn]
+    resources = ["${aws_s3_bucket.website_bucket.arn}/*"]
   }
 }
 
@@ -45,6 +45,14 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = var.s3_origin_id
     viewer_protocol_policy = "redirect-to-https"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
   }
 
   enabled = false
