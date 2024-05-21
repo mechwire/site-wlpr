@@ -18,4 +18,5 @@ variable "repository_name" {
 variable "bucket_name" {
   description = "the name of the s3 bucket"
   type        = string
+  default     = "wlpr.tech"
 }
