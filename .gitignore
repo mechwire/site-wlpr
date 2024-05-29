@@ -104,5 +104,11 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Don't check in lock files
+.terraform.lock.hcl
+
 # Hide backend
 **.tfbackend
+
+# Temporarily Hide README.md
+README.md
