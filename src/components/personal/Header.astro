@@ -7,6 +7,6 @@ const { subdirectoryName, subdirectoryPath } = Astro.props;
 ---
 
 <header>
-  <a id="header-logo" href=`${subdirectoryPath}/`>{subdirectoryName}</a>
+  <a id="header-logo" role="banner" href=`${subdirectoryPath}/`>{subdirectoryName}</a>
   <Navigation subdirectory={subdirectoryPath} />
 </header>

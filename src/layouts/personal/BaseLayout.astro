@@ -11,7 +11,7 @@ const subdirectoryPath = `/${subdirectoryName}`;
 
 ---
 
-<GlobalLayout pageTitle={pageTitle}>
+<GlobalLayout pageTitle=`${subdirectoryName} - ${pageTitle}`>
   <Header subdirectoryName={subdirectoryName} subdirectoryPath={subdirectoryPath} />
   <slot />
   <Footer />
