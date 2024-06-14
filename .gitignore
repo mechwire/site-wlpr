@@ -111,4 +111,4 @@ terraform.rc
 **.tfbackend
 
 # Temporarily Hide README.md
-*.md
+README.md

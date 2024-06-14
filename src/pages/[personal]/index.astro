@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../../layouts/personal/BaseLayout.astro";
-const pageTitle = "home";
 
 
 const { personal } = Astro.params
@@ -10,6 +9,8 @@ export async function getStaticPaths() {
     { params: { personal: "mechwire" } },
   ]
 }
+
+const pageTitle = "home";
 
 ---
 

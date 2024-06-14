@@ -6,7 +6,12 @@ body {
   color: #eeeeee;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: #dcc6e0;
 }
 
@@ -15,17 +20,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 nav > ul > li:hover {
-  background-color: #4A4845;
+  background-color: #4a4845;
 }
 
 footer {
   border-top: 0.1rem solid #dcc6e0;
 }
 
-/* additional */
 a {
   font-weight: bold;
-  text-decoration:none; /* not accesible */
+  text-decoration: none;
 }
 
 a:link {
@@ -33,7 +37,7 @@ a:link {
 }
 
 a:visited {
-  color: #C6CAE0;
+  color: #c6cae0;
 }
 
 a:hover {
@@ -43,4 +47,3 @@ a:hover {
 a:active {
   color: #6eaa62;
 }
-
