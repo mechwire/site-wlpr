@@ -62,4 +62,3 @@ jobs:
       - name: Create CloudFront invalidation
         run: aws cloudfront create-invalidation --distribution-id
           $(echo $cloudfront_distribution_id | sed 's/.*:*\///') --paths "/*"
-

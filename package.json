@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"No tests found\"",
     "dev": "astro dev",
@@ -26,7 +27,11 @@
     "pnpm": "9.1.1"
   },
   "dependencies": {
-    "astro": "^4.6.1",
-    "htmx.org": "^1.9.11"
+    "astro": "^4.6.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "eslint": "^9.4.0",
+    "prettier": "3.3.2"
   }
 }
