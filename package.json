@@ -28,8 +28,7 @@
   },
   "dependencies": {
     "astro": "^4.6.1",
-    "htmx.org": "^1.9.11",
-    "pnpm": "^9.3.0"
+    "htmx.org": "^1.9.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.4.0",
