@@ -110,5 +110,5 @@ terraform.rc
 # Hide backend
 **.tfbackend
 
-# Temporarily Hide README.md
-README.md
+# Temporarily hide all markdown while I work on content
+*.md

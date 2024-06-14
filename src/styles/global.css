@@ -1,0 +1,59 @@
+html {
+  font-size: 1rem;
+  font-family: system-ui;
+}
+
+body {
+  margin: 0 auto;
+  width: 100%;
+  padding: 1em;
+  line-height: 1.5em;
+  max-width: 80ch;
+}
+
+#article-descriptors {
+  align: right;
+}
+
+#article-contents {
+  /* https://ux.stackexchange.com/questions/108801/what-is-the-best-number-of-paragraph-width-for-readability */
+  /* This won't be consistent, depending on font */
+  margin: 0 auto;
+  padding: 1em 0;
+  width: 100%;
+  max-width: 65ch;
+  border: 2px dashed pink;
+}
+
+#header-logo {
+  font-size: 2em;
+}
+
+header {
+    display: flex;
+    flex-flow: row-wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header > * {
+    flex: 1 1 auto;
+}
+
+nav {
+  height: 100%;
+}
+
+nav > ul {
+  display: flex;
+  flex-flow: row-wrap;
+  justify-content: space-around;
+}
+
+nav > ul > li {
+    flex: 1 1 auto;
+    list-style-type: None;
+    text-align: center;
+    padding: 0.5em;
+    border-radius: 0.25em;
+}

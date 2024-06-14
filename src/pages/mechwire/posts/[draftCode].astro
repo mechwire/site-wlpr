@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../../../layouts/personal/BaseLayout.astro";
+
+export async function getStaticPaths() {
+const originalPokemon = ['bulbasaur', 'ivysaur', 'venusaur', 'charmander', 'charmeleon', 'charizard', 'squirtle', 'wartortle', 'blastoise', 'caterpie', 'metapod', 'butterfree', 'weedle', 'kakuna', 'beedrill', 'pidgey', 'pidgeotto', 'pidgeot', 'rattata', 'raticate', 'spearow', 'fearow', 'ekans', 'arbok', 'pikachu', 'raichu', 'sandshrew', 'sandslash', 'nidoran♀', 'nidorina', 'nidoqueen', 'nidoran♂', 'nidorino', 'nidoking', 'clefairy', 'clefable', 'vulpix', 'ninetales', 'jigglypuff', 'wigglytuff', 'zubat', 'golbat', 'oddish', 'gloom', 'vileplume', 'paras', 'parasect', 'venonat', 'venomoth', 'diglett', 'dugtrio', 'meowth', 'persian', 'psyduck', 'golduck', 'mankey', 'primeape', 'growlithe', 'arcanine', 'poliwag', 'poliwhirl', 'poliwrath', 'abra', 'kadabra', 'alakazam', 'machop', 'machoke', 'machamp', 'bellsprout', 'weepinbell', 'victreebel', 'tentacool', 'tentacruel', 'geodude', 'graveler', 'golem', 'ponyta', 'rapidash', 'slowpoke', 'slowbro', 'magnemite', 'magneton', "farfetch'd", 'doduo', 'dodrio', 'seel', 'dewgong', 'grimer', 'muk', 'shellder', 'cloyster', 'gastly', 'haunter', 'gengar', 'onix', 'drowzee', 'hypno', 'krabby', 'kingler', 'voltorb', 'electrode', 'exeggcute', 'exeggutor', 'cubone', 'marowak', 'hitmonlee', 'hitmonchan', 'lickitung', 'koffing', 'weezing', 'rhyhorn', 'rhydon', 'chansey', 'tangela', 'kangaskhan', 'horsea', 'seadra', 'goldeen', 'seaking', 'staryu', 'starmie', 'mr.', 'mime', 'scyther', 'jynx', 'electabuzz', 'magmar', 'pinsir', 'tauros', 'magikarp', 'gyarados', 'lapras', 'ditto', 'eevee', 'vaporeon', 'jolteon', 'flareon', 'porygon', 'omanyte', 'omastar', 'kabuto', 'kabutops', 'aerodactyl', 'snorlax', 'articuno', 'zapdos', 'moltres', 'dratini', 'dragonair', 'dragonite', 'mewtwo', 'mew']
+
+	let selections = [];
+	const maxLength = 7;
+
+	for (let i = 0; i < 7; i++) {
+		let randomDigit = Math.floor(Math.random() * originalPokemon.length);
+		console.log(selections)
+		selections.push(originalPokemon[randomDigit])
+	}
+
+  return [{
+    params: { draftCode: selections.join("-") },
+  }];
+}
+
+const { draftCode } = Astro.props;
+
+console.log(draftCode)
+
+const pageTitle = "Drafts"
+---
+
+
+Something something
+
+<BaseLayout pageTitle={pageTitle}>
+<p>test</p>
+<label for="draftTitle">Draft Title:</label>
+<input type="text" id="draftTitle" name="draftTitle"/>
+<label for="draft">Compose Draft / Draft Title</label>
+<textarea id="draft" name="draft">
+It was a dark and stormy night...
+</textarea>
+</BaseLayout>
+
+
+<label for="draftTitle">Draft Title:</label>
+<input type="text" id="draftTitle" name="draftTitle"/>
+
+<label for="draft">Compose Draft / Draft Title</label>
+<textarea id="draft" name="draft">
+It was a dark and stormy night...
+</textarea>
+
+
