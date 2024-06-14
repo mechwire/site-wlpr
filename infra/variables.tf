@@ -6,7 +6,7 @@ variable "repository_name" {
 variable "bucket_name" {
   description = "the name of the s3 bucket, with the TLD last, e.g.  cat.mammal.animal.com"
   type        = string
-  default     = "wlpr.dev"
+  default     = "wlpr.tech"
 }
 
 
