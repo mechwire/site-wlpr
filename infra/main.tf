@@ -118,6 +118,12 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
 
 # Connect s3 to Cloudfront
 data "aws_iam_policy_document" "website" {
+
+  # Without this condition, attaching the policy below will fail; one of the policies will be missing
+  source_policy_documents = [
+    data.aws_iam_policy_document.website_bucket_objects.json,
+  ]
+
   statement {
     sid       = "CloudfrontToS3"
     actions   = ["s3:GetObject"]
