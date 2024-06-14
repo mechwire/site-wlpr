@@ -141,6 +141,8 @@ data "aws_iam_policy_document" "website" {
 }
 
 resource "aws_s3_bucket_policy" "website_bucket_policy" {
+  depends_on = [aws_s3_bucket_policy.website_bucket_objects] # ensure this executes after, so it's not overwritten
+
   bucket = aws_s3_bucket.website_bucket.id
   policy = data.aws_iam_policy_document.website.json
 }
