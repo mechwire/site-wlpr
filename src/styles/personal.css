@@ -15,16 +15,12 @@ h6 {
   color: #dcc6e0;
 }
 
-#header-logo {
-  font-size: 2em;
-}
-
 nav > ul > li:hover {
   background-color: #4a4845;
 }
 
 footer {
-  border-top: 0.1rem solid #dcc6e0;
+  border-top: 0.1em solid #dcc6e0;
 }
 
 a {

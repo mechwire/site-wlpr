@@ -6,7 +6,6 @@ html {
 body {
   margin: 0 auto;
   width: 100%;
-  padding: 1em;
   line-height: 1.5em;
   max-width: 80ch;
 }
@@ -20,6 +19,7 @@ header {
   flex-flow: row-wrap;
   justify-content: space-between;
   align-items: center;
+  margin: 1em;
 }
 
 header > * {
@@ -42,4 +42,13 @@ nav > ul > li {
   text-align: center;
   padding: 0.5em;
   border-radius: 0.25em;
+}
+
+
+article {
+  margin: 2em;
+}
+
+footer {
+  margin: 1em;
 }
