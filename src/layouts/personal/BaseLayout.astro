@@ -1,0 +1,18 @@
+---
+import "../../styles/personal.css";
+import GlobalLayout from "../GlobalLayout.astro"
+import Header from '../../components/personal/Header.astro';
+import Footer from '../../components/personal/Footer.astro';
+const { pageTitle } = Astro.props;
+
+
+const subdirectoryName = "mechwire";
+const subdirectoryPath = `/${subdirectoryName}`;
+
+---
+
+<GlobalLayout pageTitle={pageTitle}>
+  <Header subdirectoryName={subdirectoryName} subdirectoryPath={subdirectoryPath} />
+  <slot />
+  <Footer />
+</GlobalLayout>

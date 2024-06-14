@@ -1,0 +1,45 @@
+html {
+  font-size: 1rem;
+  font-family: system-ui;
+}
+
+body {
+  margin: 0 auto;
+  width: 100%;
+  padding: 1em;
+  line-height: 1.5em;
+  max-width: 80ch;
+}
+
+#header-logo {
+  font-size: 2em;
+}
+
+header {
+    display: flex;
+    flex-flow: row-wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header > * {
+    flex: 1 1 auto;
+}
+
+nav {
+  height: 100%;
+}
+
+nav > ul {
+  display: flex;
+  flex-flow: row-wrap;
+  justify-content: space-around;
+}
+
+nav > ul > li {
+    flex: 1 1 auto;
+    list-style-type: None;
+    text-align: center;
+    padding: 0.5em;
+    border-radius: 0.25em;
+}

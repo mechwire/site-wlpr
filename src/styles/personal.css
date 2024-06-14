@@ -1,0 +1,46 @@
+html {
+  background-color: #363431;
+}
+
+body {
+  color: #eeeeee;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #dcc6e0;
+}
+
+#header-logo {
+  font-size: 2em;
+}
+
+nav > ul > li:hover {
+  background-color: #4A4845;
+}
+
+footer {
+  border-top: 0.1rem solid #dcc6e0;
+}
+
+/* additional */
+a {
+  font-weight: bold;
+  text-decoration:none; /* not accesible */
+}
+
+a:link {
+  color: #cae0c6;
+}
+
+a:visited {
+  color: #C6CAE0;
+}
+
+a:hover {
+  color: #9cc594;
+}
+
+a:active {
+  color: #6eaa62;
+}
+
