@@ -23,25 +23,6 @@ resource "aws_s3_bucket" "website_bucket" {
   }
 }
 
-// IAM alone is not enough to grant access to the contents of an s3 bucket, particularly for PutObject. We need a policy document to allow it.
-data "aws_iam_policy_document" "website_bucket_objects" {
-  statement {
-    principals {
-      type        = "AWS" // Overly permissive, because we're restricting it below
-      identifiers = [data.aws_caller_identity.current.arn]
-    }
-
-    actions   = ["s3:GetObject", "s3:PutObject"]
-    resources = ["${aws_s3_bucket.website_bucket.arn}/*"]
-  }
-}
-
-resource "aws_s3_bucket_policy" "website_bucket_objects" {
-  bucket = aws_s3_bucket.website_bucket.id
-  policy = data.aws_iam_policy_document.website_bucket_objects.json
-}
-
-
 /* WAF
 
 https://systemweakness.com/aws-waf-with-terraform-1dafa305c4a1
@@ -116,14 +97,22 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
   }
 }
 
-# Connect s3 to Cloudfront
+// Set the s3 Bucket Policy
+
 data "aws_iam_policy_document" "website" {
+  // IAM alone is not enough to grant access to the contents of an s3 bucket, particularly for PutObject. We need a policy document to allow it.
+  statement {
+    sid = "WebsiteBucketObjects"
+    principals {
+      type        = "AWS" // Overly permissive, because we're restricting it below
+      identifiers = [data.aws_caller_identity.current.arn]
+    }
 
-  # Without this condition, attaching the policy below will fail; one of the policies will be missing
-  source_policy_documents = [
-    data.aws_iam_policy_document.website_bucket_objects.json,
-  ]
+    actions   = ["s3:GetObject", "s3:PutObject"]
+    resources = ["${aws_s3_bucket.website_bucket.arn}/*"]
+  }
 
+  // Connect s3 to Cloudfront
   statement {
     sid       = "CloudfrontToS3"
     actions   = ["s3:GetObject"]
@@ -141,8 +130,6 @@ data "aws_iam_policy_document" "website" {
 }
 
 resource "aws_s3_bucket_policy" "website_bucket_policy" {
-  depends_on = [aws_s3_bucket_policy.website_bucket_objects] # ensure this executes after, so it's not overwritten
-
   bucket = aws_s3_bucket.website_bucket.id
   policy = data.aws_iam_policy_document.website.json
 }
