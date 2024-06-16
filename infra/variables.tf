@@ -3,6 +3,12 @@ variable "repository_name" {
   type        = string
 }
 
+variable "domain_name" {
+  description = "the domain of the website, with the TLD last, e.g.  cat.mammal.animal.com"
+  type        = string
+  default     = "wlpr.dev"
+}
+
 variable "bucket_name" {
   description = "the name of the s3 bucket, with the TLD last, e.g.  cat.mammal.animal.com"
   type        = string
