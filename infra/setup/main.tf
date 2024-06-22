@@ -47,6 +47,27 @@ data "aws_iam_policy_document" "repo_role" {
     actions   = ["cloudfront:CreateInvalidation"]
     resources = ["*"] // We'll tighten this up later
   }
+
+  statement {
+    sid       = "ManageAWSCertManager"
+    effect    = "Allow"
+    actions   = ["acm:RequestCertificate", "acm:DeleteCertificate", "acm:AddTagsToCertificate", "acm:DescribeCertificate", "acm:ListTagsForCertificate"]
+    resources = ["*"] // We'll tighten this up later
+  }
+
+  statement {
+    sid       = "ManageRoute53"
+    effect    = "Allow"
+    actions   = ["route53:GetHostedZone", "route53:CreateHostedZone", "route53:DeleteHostedZone", "route53:GetChange", "route53:ListTagsForResource", "route53:ChangeResourceRecordSets", "route53:ListResourceRecordSets", "route53:GetDNSSEC", "route53:DeactivateKeySigningKey", "route53:DeleteKeySigningKey", "route53:EnableHostedZoneDNSSEC", "route53:DisableHostedZoneDNSSEC"]
+    resources = ["*"] // We'll tighten this up later
+  }
+
+  statement {
+    sid       = "ManageKMSForDNSSEC"
+    effect    = "Allow"
+    actions   = ["kms:CreateKey", "kms:DescribeKey", "kms:GetKeyPolicy", "kms:GetKeyRotationStatus", "kms:ListResourceTags", "kms:ScheduleKeyDeletion", "kms:PutKeyPolicy", "route53:CreateKeySigningKey", "kms:GetPublicKey", "kms:Sign", ]
+    resources = ["*"] // We'll tighten this up later
+  }
 }
 
 resource "aws_iam_policy" "repo_role" {
