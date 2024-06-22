@@ -214,6 +214,14 @@ resource "aws_cloudfront_function" "index_resolver" {
   code    = file("${path.module}/cloudfront_functions/index_resolver.js")
 }
 
+resource "aws_cloudfront_function" "bot_protection" {
+  name    = "BotProtection"
+  runtime = "cloudfront-js-2.0"
+  comment = "Rate limits crawlers that match regex"
+  publish = true
+  code    = file("${path.module}/cloudfront_functions/bot_protection.js")
+}
+
 resource "aws_cloudfront_origin_access_control" "cdn_static_site" {
   name                              = var.bucket_name
   origin_access_control_origin_type = "s3"
@@ -239,6 +247,11 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
     function_association {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.index_resolver.arn
+    }
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.bot_protection.arn
     }
 
     # Optional
