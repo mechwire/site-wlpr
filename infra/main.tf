@@ -206,20 +206,12 @@ Instead, the cheapest solution here is likely alerting.
 
 # Cloudfront
 
-resource "aws_cloudfront_function" "index_resolver" {
-  name    = "IndexPageResolver"
+resource "aws_cloudfront_function" "request" {
+  name    = "RequestValidator"
   runtime = "cloudfront-js-2.0"
-  comment = "Resolves URL to index.html if nothing more specific exists"
+  comment = "Resolves URL to index.html if nothing more specific exists as well as rate limiting requests to prevent crawling"
   publish = true
-  code    = file("${path.module}/cloudfront_functions/index_resolver.js")
-}
-
-resource "aws_cloudfront_function" "bot_protection" {
-  name    = "BotProtection"
-  runtime = "cloudfront-js-2.0"
-  comment = "Rate limits crawlers that match regex"
-  publish = true
-  code    = file("${path.module}/cloudfront_functions/bot_protection.js")
+  code    = file("${path.module}/cloudfront_functions/request_validator.js")
 }
 
 resource "aws_cloudfront_origin_access_control" "cdn_static_site" {
@@ -246,12 +238,7 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
 
     function_association {
       event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.index_resolver.arn
-    }
-
-    function_association {
-      event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.bot_protection.arn
+      function_arn = aws_cloudfront_function.request.arn
     }
 
     # Optional
