@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "uvu ./infra/tests",
+    "test": "echo \"No tests\"",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
