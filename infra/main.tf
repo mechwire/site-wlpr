@@ -206,13 +206,20 @@ Instead, the cheapest solution here is likely alerting.
 
 # Cloudfront
 
+resource "aws_cloudfront_function" "index_resolver" {
+  name    = "IndexPageResolver"
+  runtime = "cloudfront-js-2.0"
+  comment = "Resolves URL to index.html if nothing more specific exists"
+  publish = true
+  code    = file("${path.module}/cloudfront_functions/index_resolver.js")
+}
+
 resource "aws_cloudfront_origin_access_control" "cdn_static_site" {
   name                              = var.bucket_name
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
 }
-
 
 resource "aws_cloudfront_distribution" "cdn_static_site" {
   default_cache_behavior {
@@ -227,6 +234,11 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
       cookies {
         forward = "none"
       }
+    }
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.index_resolver.arn
     }
 
     # Optional
