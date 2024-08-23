@@ -1,6 +1,7 @@
 // https://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html
+
 function handler(event) {
-  if (isBot(event)) {
+  if (isBotAgent(event) || isCrawling(event)) {
     return {
       statusCode: 429,
       statusDescription: "Rate Limited",
@@ -10,7 +11,7 @@ function handler(event) {
   return routeToIndexPage(event);
 }
 
-function isBot(event) {
+function isBotAgent(event) {
   const pattern = new RegExp(
     "bot|ai|voltron|gpt|google|yahoo|bing|bytespider|omgili",
   );
@@ -39,3 +40,26 @@ function routeToIndexPage(event) {
 
   return request;
 }
+
+function isKnownCrawler(event) {
+  
+  return event.request.uri.includes("/maple/tap")
+}
+
+function isCrawling(event) {
+  if (event.request.uri.includes("/maple/tap") || await kvsHandle.get(key)) {
+    // trigger lambda
+    return true
+  }
+
+  return false
+}
+
+
+// Cloudfront func calls lambda at edge to modify cloudfront kv store
+
+import cf from 'cloudfront';
+const kvsId = "a1b2c3d4-5678-90ab-cdef-EXAMPLE11111";
+const kvsHandle = cf.kvs(kvsId);
+
+
