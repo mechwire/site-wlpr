@@ -1,10 +1,12 @@
-# Example: Allow all bots to scan and index your site.
-# Full syntax: https://developers.google.com/search/docs/advanced/robots/create-robots-txt
+# https://developers.google.com/search/docs/advanced/robots/create-robots-txt
+
+# Block All
+
 User-agent: *
 Disallow: /
 
 
-# Crawlers that ignore
+# Crawlers that ignore unless specified
 
 User-agent: Googlebot
 Disallow: /
