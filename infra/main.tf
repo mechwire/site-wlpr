@@ -352,20 +352,20 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
 
   custom_error_response {
     error_caching_min_ttl = 3600
-    error_code = 404
-    response_page_path = "/error.html"
+    error_code            = 404
+    response_page_path    = "/error.html"
   }
 
   custom_error_response {
     error_caching_min_ttl = 3600
-    error_code = 429
-    response_page_path = "/error.html"
+    error_code            = 429
+    response_page_path    = "/error.html"
   }
 
   custom_error_response {
     error_caching_min_ttl = 3600
-    error_code = 500
-    response_page_path = "/error.html"
+    error_code            = 500
+    response_page_path    = "/error.html"
   }
 
   tags = {
