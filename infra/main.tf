@@ -207,14 +207,14 @@ Instead, the cheapest solution here is likely alerting.
 # Cloudfront
 
 resource "aws_cloudfront_key_value_store" "lambda_honeypot" {
-  name    = "wlpr_honeypot"
+  name    = "${var.repository_name}_honeypot"
   comment = "This stores IPs that have accessed the honeypot link"
 }
 
 ## Cloudfront Function
 
 resource "aws_cloudfront_function" "request" {
-  name    = "RequestValidator"
+  name    = "${var.repository_name}_ViewerRequestValidator"
   runtime = "cloudfront-js-2.0"
   comment = "Resolves URL to index.html if nothing more specific exists as well as rate limiting requests to prevent crawling"
   publish = true
