@@ -42,9 +42,39 @@ data "aws_iam_policy_document" "repo_role" {
   }
 
   statement {
+    sid       = "ManageCloudfrontKVS"
+    effect    = "Allow"
+    actions   = ["cloudfront:CreateKeyValueStore", "cloudfront:DeleteKeyValueStore", "cloudfront:DescribeKeyValueStore"]
+    resources = ["*"]
+  }
+
+  statement {
     sid       = "InvalidateCloudfront"
     effect    = "Allow"
     actions   = ["cloudfront:CreateInvalidation"]
+    resources = ["*"]
+  }
+
+  // "arn:aws:iam::${var.aws_account_id}:role/${var.repository_name}_lambda_service_role_honeypot"
+  statement {
+    sid       = "ManageLambdaEdgeServiceRoleCreation"
+    effect    = "Allow"
+    actions   = ["iam:CreateRole", "iam:DeleteRole", "iam:GetRole", "iam:ListRolePolicies", "iam:ListAttachedRolePolicies", "iam:ListInstanceProfilesForRole", "iam:PassRole", "iam:UpdateAssumeRolePolicy", "iam:PutRolePolicy", "iam:GetRolePolicy", "iam:DeleteRolePolicy"]
+    resources = ["*"]
+  }
+
+  // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-permissions.html#using-service-linked-roles
+  statement {
+    sid       = "ManageLambdaEdgeServiceRoleCreationManagement"
+    effect    = "Allow"
+    actions   = ["iam:CreateServiceLinkedRole", "iam:DeleteServiceLinkedRole", "iam:GetServiceLinkedRoleDeletionStatus", "iam:UpdateRoleDescription", "iam:AttachRolePolicy", "iam:PutRolePolicy"]
+    resources = ["arn:aws:iam::*:role/aws-service-role/replicator.lambda.amazonaws.com/"]
+  }
+
+  statement {
+    sid       = "ManageLambdaEdge"
+    effect    = "Allow"
+    actions   = ["lambda:CreateFunction", "lambda:DeleteFunction", "lambda:TagResource", "lambda:GetFunction", "lambda:ListVersionsByFunction", "lambda:GetFunctionCodeSigningConfig", "lambda:UpdateFunctionCode", "lambda:PublishFunction", "lambda:PublishVersion", "lambda:EnableReplication*", "lambda:DisableReplication*"]
     resources = ["*"]
   }
 

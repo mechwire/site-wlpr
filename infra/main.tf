@@ -206,13 +206,85 @@ Instead, the cheapest solution here is likely alerting.
 
 # Cloudfront
 
+resource "aws_cloudfront_key_value_store" "lambda_honeypot" {
+  name    = "${var.repository_name}_honeypot"
+  comment = "This stores IPs that have accessed the honeypot link"
+}
+
+## Cloudfront Function
+
 resource "aws_cloudfront_function" "request" {
-  name    = "RequestValidator"
+  name    = "${var.repository_name}_ViewerRequestValidator"
   runtime = "cloudfront-js-2.0"
   comment = "Resolves URL to index.html if nothing more specific exists as well as rate limiting requests to prevent crawling"
   publish = true
   code    = file("${path.module}/cloudfront_functions/request_validator.js")
+
+  key_value_store_associations = [
+    aws_cloudfront_key_value_store.lambda_honeypot.arn,
+  ]
 }
+
+## Lambda@Edge
+
+// This is to create a "honeypot". Anyone who accesses the honeypot is a crawler. Crawlers get 429'd for a week.
+
+data "aws_iam_policy_document" "lambda_honeypot_service_role_sts" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com", "edgelambda.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_iam_policy_document" "lambda_honeypot_service_role_cloudfront_kvs" {
+  statement {
+    effect = "Allow"
+
+    actions   = ["cloudfront-keyvaluestore:*"]
+    resources = [aws_cloudfront_key_value_store.lambda_honeypot.arn]
+  }
+}
+
+resource "aws_iam_role" "lambda_honeypot_service_role" {
+  name               = "${var.repository_name}_lambda_service_role_honeypot"
+  assume_role_policy = data.aws_iam_policy_document.lambda_honeypot_service_role_sts.json
+  inline_policy {
+    name   = "CloudfrontKVSAccess"
+    policy = data.aws_iam_policy_document.lambda_honeypot_service_role_cloudfront_kvs.json
+  }
+}
+
+data "archive_file" "lambda_honeypot" {
+  type        = "zip"
+  output_path = "./honeypot.zip"
+
+  source {
+    content  = templatefile("${path.module}/lambda/honeypot.js", { kvs_arn = aws_cloudfront_key_value_store.lambda_honeypot.arn })
+    filename = "index.js"
+  }
+}
+
+resource "aws_lambda_function" "lambda_honeypot" {
+  filename      = data.archive_file.lambda_honeypot.output_path
+  function_name = "${var.repository_name}_honeypot"
+  role          = aws_iam_role.lambda_honeypot_service_role.arn
+  handler       = "index.handler"
+
+  source_code_hash = data.archive_file.lambda_honeypot.output_base64sha256
+
+  runtime = "nodejs20.x"
+
+  publish = true
+
+  provider = aws.us_east_1 // Must exist in this region
+}
+
 
 resource "aws_cloudfront_origin_access_control" "cdn_static_site" {
   name                              = var.bucket_name
@@ -234,6 +306,12 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
       cookies {
         forward = "none"
       }
+    }
+
+    lambda_function_association {
+      event_type   = "origin-response"
+      lambda_arn   = aws_lambda_function.lambda_honeypot.qualified_arn
+      include_body = false
     }
 
     function_association {
