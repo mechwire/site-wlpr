@@ -350,6 +350,24 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
   default_root_object = "index.html"
   aliases             = [var.domain_name]
 
+  custom_error_response {
+    error_caching_min_ttl = 3600
+    error_code = 404
+    response_page_path = "/error.html"
+  }
+
+  custom_error_response {
+    error_caching_min_ttl = 3600
+    error_code = 429
+    response_page_path = "/error.html"
+  }
+
+  custom_error_response {
+    error_caching_min_ttl = 3600
+    error_code = 500
+    response_page_path = "/error.html"
+  }
+
   tags = {
     github     = true,
     repository = var.repository_name
