@@ -109,7 +109,7 @@ data "aws_iam_policy_document" "repo_role" {
 }
 
 resource "aws_iam_policy" "repo_role" {
-  name        = "AstroS3ToCloudfront"
+  name        = "AstroS3ToCloudfront-${var.repository_name}"
   description = "Permissions to create a tagged S3 bucket, upload things to it, and serve it through Cloudfront. "
   policy      = data.aws_iam_policy_document.repo_role.json
 }
