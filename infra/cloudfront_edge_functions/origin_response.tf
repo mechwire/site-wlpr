@@ -1,6 +1,5 @@
 // This is to create a "honeypot". Anyone who accesses the honeypot is a crawler. Crawlers get 429'd for a week.
 
-
 data "aws_iam_policy_document" "lambda_honeypot_service_role_sts" {
   statement {
     effect = "Allow"
@@ -37,7 +36,7 @@ data "archive_file" "lambda_honeypot" {
   output_path = "./honeypot.zip"
 
   source {
-    content  = templatefile("${path.module}/lambda/honeypot.js", { kvs_arn = aws_cloudfront_key_value_store.lambda_honeypot.arn })
+    content  = templatefile("${path.cwd}/lambda/honeypot.js", { kvs_arn = aws_cloudfront_key_value_store.lambda_honeypot.arn })
     filename = "index.js"
   }
 }

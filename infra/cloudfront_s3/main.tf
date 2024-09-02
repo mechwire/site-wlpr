@@ -2,13 +2,18 @@
 //     * s3 is blob storage
 //     * Cloudfront is a CDN that accomplishes caching and hosting
 
-data "aws_caller_identity" "current" {}
-
 // Many resources need to exist in us-east-1, even if it's different from your typical region
-provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 2.7.0"
+      configuration_aliases = [ aws, aws.us_east_1 ]
+    }
+  }
 }
+
+data "aws_caller_identity" "current" {}
 
 // s3 Bucket
 resource "aws_s3_bucket" "website_bucket" {
@@ -18,14 +23,6 @@ resource "aws_s3_bucket" "website_bucket" {
     github     = true,
     repository = var.repository_name
   }
-}
-
-// Cloudfront Edge Functions
-
-module "edge_functions" {
-  source = "./cloudfront_edge_functions"
-
-  repository_name = var.repository_name
 }
 
 // Cloudfront Distribution
@@ -54,13 +51,13 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
 
     lambda_function_association {
       event_type   = "origin-response"
-      lambda_arn   = edge_functions.origin_response_lambda_qualified_arn
+      lambda_arn   = var.origin_response_lambda_qualified_arn
       include_body = false
     }
 
     function_association {
       event_type   = "viewer-request"
-      function_arn = edge_functions.viewer_request_cloudfront_arn
+      function_arn = var.viewer_request_cloudfront_arn
     }
 
     # Optional
@@ -83,8 +80,9 @@ resource "aws_cloudfront_distribution" "cdn_static_site" {
       restriction_type = "none"
     }
   }
+
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.cert.arn
+    acm_certificate_arn      = var.acm_certificate_arn
     ssl_support_method       = "sni-only" // recommended setting, supported by most
     minimum_protocol_version = "TLSv1.2_2021"
   }

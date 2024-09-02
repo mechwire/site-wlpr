@@ -1,3 +1,14 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 2.7.0"
+      configuration_aliases = [ aws, aws.us_east_1 ]
+    }
+  }
+}
+
+
 data "aws_caller_identity" "current" {}
 
 resource "aws_route53_zone" "zone" {
@@ -155,14 +166,4 @@ resource "aws_acm_certificate_validation" "cert_validation" {
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 
   provider = aws.us_east_1 // Certificates for Cloudfront use need to exist in us-east-1
-}
-
-// This exists in Porkbun, but we need to recreate them in AWS's NS.
-module "dns_records" {
-  source = "./dns_records"
-
-  domain_name                = var.domain_name
-  route53_zone_id            = aws_route53_zone.zone.id
-  cloudfront_distribution_id = var.cloudfront_distribution_id
-
 }

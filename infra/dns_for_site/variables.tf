@@ -8,9 +8,3 @@ variable "domain_name" {
   type        = string
   default     = "wlpr.dev"
 }
-
-variable "cloudfront_distribution_id" {
-  description = "the ID of the Cloudfront distribution"
-  type        = string
-  default     = "EDFDVBD632BHDS5"
-}

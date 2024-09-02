@@ -1,5 +1,11 @@
 // Many resources need to exist in us-east-1, even if it's different from your typical region
-provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 2.7.0"
+      configuration_aliases = [ aws, aws.us_east_1 ]
+    }
+  }
 }

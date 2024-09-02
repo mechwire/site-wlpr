@@ -12,8 +12,8 @@ resource "aws_route53_record" "apexv4" {
   type    = "A"
 
   alias {
-    name                   = data.aws_cloudfront_distribution.cdn_static_site.domain_name
-    zone_id                = data.aws_cloudfront_distribution.cdn_static_site.hosted_zone_id
+    name                   = data.aws_cloudfront_distribution.site.domain_name
+    zone_id                = data.aws_cloudfront_distribution.site.hosted_zone_id
     evaluate_target_health = false
   }
 }
@@ -24,8 +24,8 @@ resource "aws_route53_record" "apexv6" {
   type    = "AAAA"
 
   alias {
-    name                   = data.aws_cloudfront_distribution.cdn_static_site.domain_name
-    zone_id                = data.aws_cloudfront_distribution.cdn_static_site.hosted_zone_id
+    name                   = data.aws_cloudfront_distribution.site.domain_name
+    zone_id                = data.aws_cloudfront_distribution.site.hosted_zone_id
     evaluate_target_health = false
   }
 }

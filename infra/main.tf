@@ -12,13 +12,9 @@ terraform {
 
 provider "aws" {}
 
-module "static_asset_hosting" {
-  source = "./cloudfront_s3"
-
-  repository_name = var.repository_name
-  bucket_name     = var.bucket_name
-  domain_name     = var.domain_name
-  s3_origin_id    = var.s3_origin_id
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
 }
 
 # Custom Domain
@@ -26,7 +22,51 @@ module "static_asset_hosting" {
 module "dns_routing_to_static_assets" {
   source = "./dns_for_site"
 
-  repository_name            = var.repository_name
+  repository_name = var.repository_name
+  domain_name     = var.domain_name
+
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us_east_1
+  }
+}
+
+# Static Asset Hosting
+
+module "edge_functions" {
+  source = "./cloudfront_edge_functions"
+
+  repository_name = var.repository_name
+
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us_east_1
+  }
+}
+
+module "static_asset_hosting" {
+  source = "./cloudfront_s3"
+
+  repository_name                      = var.repository_name
+  bucket_name                          = var.bucket_name
+  domain_name                          = var.domain_name
+  s3_origin_id                         = var.s3_origin_id
+  acm_certificate_arn                  = module.dns_routing_to_static_assets.acm_certificate_arn
+  origin_response_lambda_qualified_arn = module.edge_functions.origin_response_lambda_qualified_arn
+  viewer_request_cloudfront_arn        = module.edge_functions.viewer_request_cloudfront_arn
+
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us_east_1
+  }
+}
+
+
+// This exists in Porkbun, but we need to recreate them in AWS's NS.
+module "dns_records" {
+  source = "./dns_records"
+
   domain_name                = var.domain_name
-  cloudfront_distribution_id = var.cloudfront_distribution_arn
+  route53_zone_id            = module.dns_routing_to_static_assets.route53_zone_id
+  cloudfront_distribution_id = module.static_asset_hosting.cloudfront_distribution_arn
 }

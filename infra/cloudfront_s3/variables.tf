@@ -21,3 +21,16 @@ variable "s3_origin_id" {
   type        = string
   default     = "s3-wlpr-id"
 }
+
+variable "acm_certificate_arn" {
+  description = "ARN of ACM Certificate"
+  type        = string
+}
+
+variable "origin_response_lambda_qualified_arn" {
+  description = "The qualified ARN for the Cloudfront lambda@edge origin response function"
+}
+
+variable "viewer_request_cloudfront_arn" {
+  description = "The ARN for the Cloudfront viewer-request function"
+}
