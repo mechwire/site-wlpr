@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"No tests\"",
-    "fmt": "prettier ./infra/lambda ./infra/cloudfront_functions -write",
+    "fmt": "prettier ./infra/lambda ./infra/cloudfront_functions --write",
     "lint": "eslint ./infra/lambda ./infra/cloudfront_functions",
     "dev": "astro dev",
     "start": "astro dev",

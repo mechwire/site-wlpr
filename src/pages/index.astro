@@ -1,8 +1,10 @@
 ---
 import BaseLayout from "../layouts/GlobalLayout.astro";
+import UnderConstruction from '../assets/under_construction.gif'
+
 const pageTitle = "wlpr";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <p>Under Construction</p>
+  <img src={UnderConstruction.src} alt="Pikachu jackhammers into the ground in front of a construction blocker." />
 </BaseLayout>

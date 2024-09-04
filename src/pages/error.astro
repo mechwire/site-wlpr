@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "../layouts/GlobalLayout.astro";
-const pageTitle = "Funny Error";
+import UnderConstruction from '../assets/under_construction.gif'
+const pageTitle = "Oopsies";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <p>Under Construction</p>
+  <img src={UnderConstruction.src} alt="Pikachu jackhammers into the ground in front of a construction blocker." />
 </BaseLayout>
