@@ -33,6 +33,20 @@ module "dns_routing_to_static_assets" {
   }
 }
 
+module "domain_certificate" {
+  source = "./domain_certificate"
+
+  repository_name = var.repository_name
+  domain_name     = var.domain_name
+  route53_zone_id = module.dns_routing_to_static_assets.route53_zone_id
+
+
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us_east_1
+  }
+}
+
 # Static Asset Hosting
 
 module "edge_functions" {
@@ -54,7 +68,7 @@ module "static_asset_hosting" {
   bucket_name                          = var.bucket_name
   domain_name                          = var.domain_name
   s3_origin_id                         = var.s3_origin_id
-  acm_certificate_arn                  = module.dns_routing_to_static_assets.acm_certificate_arn
+  acm_certificate_arn                  = module.domain_certificate.acm_certificate_arn
   origin_response_lambda_qualified_arn = module.edge_functions.origin_response_lambda_qualified_arn
   viewer_request_cloudfront_arn        = module.edge_functions.viewer_request_cloudfront_arn
 
